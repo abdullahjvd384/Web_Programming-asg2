@@ -1,0 +1,51 @@
+You Are required to make an amazon clone https://www.amazon.in/ of only the
+required pages and functionalities working
+
+1. UI/UX & Dynamic Components (25 Marks)
+● Dynamic Navbar & Home Page (10 Marks): * Implementation of the Amazon-style
+header with location picker, search bar, and account/orders links.
+○ Home page must feature dynamic banners (carousel) and category tiles
+fetching data from the backend.
+
+● Product Listing Page (PLP) (10 Marks): * Grid/List view of products with ratings,
+pricing, and "Prime" badges.
+○ Design must match the reference site exactly (CSS/Tailwind/Styled
+Components).
+
+● Design Accuracy (5 Marks): * Adherence to Amazon’s color palette, typography,
+and spacing across all required pages.
+2. Authentication & User Management (15 Marks)
+● Sign-up/Sign-in Functionality:
+○ Secure JWT-based authentication.
+○ Form validation (email format, password strength) and error handling for
+existing users or incorrect credentials.
+○ Protected routes (e.g., users must be logged in to view their specific cart or
+profile).
+
+3. Search & Filtering (15 Marks)
+● Dynamic Search Bar:
+○ Real-time filtering of products based on titles or categories.
+
+○ Implementation of a search results page that updates dynamically without a
+full page reload.
+
+4. Cart Logic & CRUD Operations (20 Marks)
+● Add to Cart / Remove from Cart:
+○ Functional "Add to Cart" buttons on both the PLP and Home Page.
+○ Full CRUD: Ability to increase/decrease quantity within the cart, remove
+specific items, and clear the cart.
+
+● Subtotal Calculation: * Real-time calculation of the total price and item count in the
+cart overlay or page.
+5. State Management & Persistence (15 Marks)
+● Redux/Redux Toolkit:
+○ Centralized state management for user authentication status and cart items.
+● Persistent Storage:
+○ Cart data must persist across page refreshes (using redux-persist or
+syncing with MongoDB/LocalStorage).
+6. Backend & Database Integration (10 Marks)
+● API Development:
+○ RESTful endpoints for fetching products, user authentication, and managing
+cart data.
+● Database Schema:
+○ Structured MongoDB collections for Users and Products.
