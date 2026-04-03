@@ -1,67 +1,57 @@
-import { Link } from 'react-router-dom'
-
 const Footer = () => {
   return (
     <footer>
-      {/* Back to top */}
-      <div
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="bg-[#37475a] text-white text-center py-3 cursor-pointer hover:bg-[#485769] text-sm"
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="w-full bg-amazon-nav-secondary text-secondary-foreground text-sm py-3 hover:brightness-125 transition-colors"
       >
         Back to top
-      </div>
-
-      {/* Links */}
-      <div className="bg-[#232f3e] text-white py-10">
-        <div className="max-w-[1200px] mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+      </button>
+      <div className="bg-amazon-nav text-secondary-foreground py-10 px-4">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <h4 className="font-bold mb-3 text-base">Get to Know Us</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/" className="hover:underline">About Us</Link></li>
-              <li><Link to="/" className="hover:underline">Careers</Link></li>
-              <li><Link to="/" className="hover:underline">Press Releases</Link></li>
-              <li><Link to="/" className="hover:underline">Amazon Science</Link></li>
+            <h4 className="font-bold mb-3">Get to Know Us</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:underline cursor-pointer">About Us</li>
+              <li className="hover:underline cursor-pointer">Careers</li>
+              <li className="hover:underline cursor-pointer">Press Releases</li>
+              <li className="hover:underline cursor-pointer">Amazon Science</li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-3 text-base">Connect with Us</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/" className="hover:underline">Facebook</Link></li>
-              <li><Link to="/" className="hover:underline">Twitter</Link></li>
-              <li><Link to="/" className="hover:underline">Instagram</Link></li>
+            <h4 className="font-bold mb-3">Connect with Us</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:underline cursor-pointer">Facebook</li>
+              <li className="hover:underline cursor-pointer">Twitter</li>
+              <li className="hover:underline cursor-pointer">Instagram</li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-3 text-base">Make Money with Us</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/" className="hover:underline">Sell on Amazon</Link></li>
-              <li><Link to="/" className="hover:underline">Sell under Amazon Accelerator</Link></li>
-              <li><Link to="/" className="hover:underline">Protect and Build Your Brand</Link></li>
-              <li><Link to="/" className="hover:underline">Amazon Global Selling</Link></li>
+            <h4 className="font-bold mb-3">Make Money with Us</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:underline cursor-pointer">Sell on Amazon</li>
+              <li className="hover:underline cursor-pointer">Sell under Private Brands</li>
+              <li className="hover:underline cursor-pointer">Become an Affiliate</li>
+              <li className="hover:underline cursor-pointer">Advertise Your Products</li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-3 text-base">Let Us Help You</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/" className="hover:underline">COVID-19 and Amazon</Link></li>
-              <li><Link to="/" className="hover:underline">Your Account</Link></li>
-              <li><Link to="/products" className="hover:underline">Returns Centre</Link></li>
-              <li><Link to="/" className="hover:underline">100% Purchase Protection</Link></li>
-              <li><Link to="/" className="hover:underline">Help</Link></li>
+            <h4 className="font-bold mb-3">Let Us Help You</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:underline cursor-pointer">COVID-19 and Amazon</li>
+              <li className="hover:underline cursor-pointer">Your Account</li>
+              <li className="hover:underline cursor-pointer">Returns Centre</li>
+              <li className="hover:underline cursor-pointer">100% Purchase Protection</li>
+              <li className="hover:underline cursor-pointer">Help</li>
             </ul>
           </div>
         </div>
       </div>
-
-      {/* Bottom */}
-      <div className="bg-[#131921] text-white text-center py-4 text-xs">
-        <div className="mb-2">
-          <span className="text-lg font-bold">amazon<span className="text-[#febd69]">.in</span></span>
-        </div>
-        <p className="text-gray-400">&copy; 2024 Amazon Clone. All rights reserved. Educational purpose only.</p>
+      <div className="bg-amazon-dark text-muted-foreground text-xs text-center py-4">
+        © 1996-2024, Amazon.com, Inc. or its affiliates
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

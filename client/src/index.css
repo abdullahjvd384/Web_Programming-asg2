@@ -1,46 +1,102 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Ember:wght@400;500;700&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 93%;
+    --foreground: 0 0% 7%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+
+    --primary: 33 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 210 29% 24%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 33 100% 50%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 33 100% 50%;
+
+    --radius: 0.5rem;
+
+    /* Amazon-specific */
+    --amazon-dark: 195 53% 10%;
+    --amazon-dark-hover: 195 53% 15%;
+    --amazon-blue: 209 65% 38%;
+    --amazon-orange: 33 100% 50%;
+    --amazon-yellow: 48 100% 50%;
+    --amazon-light-blue: 195 53% 79%;
+    --amazon-nav: 195 53% 10%;
+    --amazon-nav-secondary: 195 35% 17%;
+    --amazon-star: 36 100% 50%;
+    --amazon-price: 0 70% 35%;
+    --amazon-prime: 209 65% 38%;
+    --amazon-deal: 0 72% 47%;
+    --amazon-green: 147 50% 36%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
 }
 
-body {
-  font-family: "Amazon Ember", Arial, sans-serif;
-  background-color: #EAEDED;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: "Amazon Ember", Arial, sans-serif;
+  }
 }
 
-#root {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  text-align: left;
-}
+@layer components {
+  .amazon-btn {
+    @apply bg-amazon-yellow text-amazon-dark-text font-medium py-1.5 px-4 rounded-lg border border-amazon-yellow-border
+      hover:brightness-95 active:brightness-90 transition-all cursor-pointer text-sm;
+  }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+  .amazon-btn-orange {
+    @apply bg-amazon-orange text-white font-medium py-1.5 px-4 rounded-lg
+      hover:brightness-95 active:brightness-90 transition-all cursor-pointer text-sm;
+  }
 
-::-webkit-scrollbar {
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
+  .amazon-link {
+    @apply text-amazon-blue hover:text-amazon-orange hover:underline cursor-pointer transition-colors text-sm;
+  }
 
-.carousel .slide {
-  background: none !important;
-}
-.carousel .control-dots .dot {
-  box-shadow: none !important;
-  background: #ccc !important;
-}
-.carousel .control-dots .dot.selected {
-  background: #febd69 !important;
+  .amazon-star {
+    @apply text-amazon-star;
+  }
+
+  .amazon-price {
+    @apply text-amazon-price font-medium;
+  }
+
+  .prime-badge {
+    @apply text-amazon-prime font-bold italic text-sm;
+  }
 }

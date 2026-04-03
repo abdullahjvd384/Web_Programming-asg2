@@ -6,7 +6,7 @@ A full-stack Amazon.in clone built with React, Express.js, and MongoDB as a Web 
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 19 (Vite), Tailwind CSS, Redux Toolkit, redux-persist |
+| Frontend | React 18 (Vite), Tailwind CSS 3, Redux Toolkit, redux-persist, React Query |
 | Backend | Node.js, Express.js |
 | Database | MongoDB (Mongoose ODM) |
 | Authentication | JWT (jsonwebtoken + bcryptjs) |
@@ -14,33 +14,34 @@ A full-stack Amazon.in clone built with React, Express.js, and MongoDB as a Web 
 ## Features
 
 ### UI/UX & Dynamic Components
-- Amazon-style navbar with location picker, search bar, account dropdown, and cart icon with badge
+- Amazon-style sticky navbar with location picker, search bar, account dropdown, and cart icon with badge
 - Home page with auto-playing hero carousel and category tiles
-- Product Listing Page with grid/list view toggle, sidebar filters (category, price, rating, Prime), and sort options
+- Product Listing Page with grid/list view toggle, sidebar filters (category, rating, Prime), and sort options
 - Product Detail Page with image, pricing, ratings, and buy box
-- Fully responsive design matching Amazon.in's color palette and typography
+- Responsive design matching Amazon.in's color palette and typography
 
 ### Authentication & User Management
-- JWT-based sign-up and sign-in
-- Form validation (email format, password strength indicator)
-- Protected routes - cart and profile require login
+- JWT-based sign-up and sign-in with real backend API
+- Form validation (email format, password strength)
+- Protected routes - cart requires login
 - Persistent auth state across page refreshes
 
 ### Search & Filtering
-- Real-time search bar with 300ms debounce and suggestion dropdown
-- Dynamic search results page (no full page reload)
-- Client-side filtering by category, price range, customer rating, and Prime eligibility
+- Real-time search bar with dynamic search results
+- Search results page (no full page reload)
+- Client-side filtering by category, customer rating, and Prime eligibility
+- Sort by price, rating, relevance, and review count
 
 ### Cart Logic & CRUD Operations
-- Add to Cart from Home Page, Product Listing, Product Detail, and Search Results
+- Add to Cart from Product Listing, Product Detail, and Search Results
 - Increase/decrease quantity with +/- controls
 - Remove individual items or clear entire cart
 - Real-time subtotal calculation (total price + item count)
 
 ### State Management & Persistence
-- Redux Toolkit with 3 slices: auth, cart, products
+- Redux Toolkit with 2 slices: auth, cart
 - redux-persist syncs auth and cart state to localStorage
-- Cart works for guest users (localStorage) and logged-in users (MongoDB)
+- React Query for server-state management (products, search)
 
 ### Backend & Database
 - RESTful API endpoints for products, authentication, and cart management
@@ -50,28 +51,67 @@ A full-stack Amazon.in clone built with React, Express.js, and MongoDB as a Web 
 ## Project Structure
 
 ```
-├── package.json                # Root monorepo scripts
-├── client/                     # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar/         # Navbar, SearchBar, LocationPicker, AccountMenu, CartIcon
-│   │   │   ├── Home/           # HeroCarousel, CategoryGrid, CategoryCard, ProductRow
-│   │   │   ├── Product/        # ProductCard, ProductListItem, FilterSidebar, RatingStars
-│   │   │   └── Cart/           # CartItem, QuantitySelector, CartSummary, EmptyCart
-│   │   ├── pages/              # HomePage, ProductListingPage, ProductDetailPage,
-│   │   │                       # SearchResultsPage, SignInPage, SignUpPage, CartPage
-│   │   ├── store/slices/       # authSlice, cartSlice, productSlice
-│   │   └── utils/              # api.js (Axios instance), validation.js
-│   └── vite.config.js
+├── package.json                  # Root monorepo scripts (dev, server, client, seed)
+├── README.md
 │
-└── server/                     # Express backend
+├── client/                       # React frontend (JSX)
+│   ├── index.html
+│   ├── vite.config.js            # Vite config with /api proxy to backend
+│   ├── tailwind.config.js        # Amazon color palette
+│   ├── postcss.config.js
+│   ├── package.json
+│   └── src/
+│       ├── main.jsx              # Entry point
+│       ├── App.jsx               # Root component with providers & routing
+│       ├── index.css             # Tailwind + Amazon CSS variables
+│       ├── components/
+│       │   ├── Navbar.jsx        # Sticky header with search, account, cart
+│       │   ├── Footer.jsx        # Footer with links
+│       │   ├── HeroCarousel.jsx  # Auto-rotating banner carousel
+│       │   ├── CategoryTiles.jsx # Category grid on homepage
+│       │   ├── DealStrip.jsx     # Product deal section
+│       │   ├── ProductCard.jsx   # Product card (grid/list views)
+│       │   └── ui/               # Minimal UI components (sonner, tooltip)
+│       ├── pages/
+│       │   ├── Index.jsx         # Home page
+│       │   ├── ProductListing.jsx# Product catalog with filters
+│       │   ├── ProductDetail.jsx # Single product page
+│       │   ├── SearchResults.jsx # Search results
+│       │   ├── Cart.jsx          # Shopping cart
+│       │   ├── SignIn.jsx        # Login page
+│       │   ├── SignUp.jsx        # Registration page
+│       │   └── NotFound.jsx      # 404 page
+│       ├── store/
+│       │   ├── store.js          # Redux store + redux-persist
+│       │   ├── authSlice.js      # Auth state (login/logout)
+│       │   ├── cartSlice.js      # Cart state (add/remove/update)
+│       │   └── hooks.js          # useAppDispatch, useAppSelector
+│       ├── hooks/
+│       │   └── use-products.js   # React Query hooks for product API
+│       ├── lib/
+│       │   ├── api.js            # Axios instance with JWT interceptor
+│       │   └── utils.js          # cn() utility for Tailwind classes
+│       └── data/
+│           └── products.js       # Category & banner data
+│
+└── server/                       # Express backend
+    ├── .env                      # Environment variables (not committed)
+    ├── package.json
     └── src/
-        ├── models/             # User, Product, Cart (Mongoose schemas)
-        ├── routes/             # auth, products, cart (REST endpoints)
-        ├── middleware/         # JWT auth middleware
-        ├── config/            # MongoDB connection
-        ├── seed.js            # Database seeder (31 products)
-        └── index.js           # Express app entry point
+        ├── index.js              # Express app entry point
+        ├── seed.js               # Database seeder (31 products)
+        ├── config/
+        │   └── db.js             # MongoDB connection
+        ├── middleware/
+        │   └── auth.js           # JWT auth middleware
+        ├── models/
+        │   ├── User.js           # User schema (bcrypt hashing)
+        │   ├── Product.js        # Product schema
+        │   └── Cart.js           # Cart schema
+        └── routes/
+            ├── auth.js           # Register, login, profile
+            ├── products.js       # List, search, get by ID
+            └── cart.js           # CRUD cart operations
 ```
 
 ## API Endpoints

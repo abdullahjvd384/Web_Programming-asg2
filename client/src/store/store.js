@@ -1,20 +1,23 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import authReducer from './slices/authSlice';
-import cartReducer from './slices/cartSlice';
-import productReducer from './slices/productSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import authReducer from "./authSlice";
+import cartReducer from "./cartSlice";
+
+const storage = {
+  getItem: (key) => Promise.resolve(localStorage.getItem(key)),
+  setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
+  removeItem: (key) => Promise.resolve(localStorage.removeItem(key)),
+};
 
 const persistConfig = {
-  key: 'root',
+  key: "amazon-clone",
   storage,
-  whitelist: ['auth', 'cart']
+  whitelist: ["auth", "cart"],
 };
 
 const rootReducer = combineReducers({
   auth: authReducer,
   cart: cartReducer,
-  products: productReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -22,7 +25,11 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false })
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export const persistor = persistStore(store);
