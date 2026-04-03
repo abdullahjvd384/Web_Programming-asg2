@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
-import { categories } from "@/data/products";
+import { useCategories } from "@/hooks/use-products";
 
 const CategoryTiles = () => {
+  const { data: categories = [], isLoading } = useCategories();
+
+  if (isLoading || categories.length === 0) return null;
+
   return (
     <div className="relative -mt-24 md:-mt-40 z-10 px-4 pb-4">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto">

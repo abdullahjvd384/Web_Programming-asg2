@@ -33,3 +33,23 @@ export function useSearchProducts(query) {
     enabled: !!query.trim(),
   });
 }
+
+export function useCategories() {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { data } = await api.get("/products/categories");
+      return data;
+    },
+  });
+}
+
+export function useBanners() {
+  return useQuery({
+    queryKey: ["banners"],
+    queryFn: async () => {
+      const { data } = await api.get("/banners");
+      return data;
+    },
+  });
+}

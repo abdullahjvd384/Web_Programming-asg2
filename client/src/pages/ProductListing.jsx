@@ -4,8 +4,7 @@ import { LayoutGrid, List } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
-import { useProducts } from "@/hooks/use-products";
-import { categories } from "@/data/products";
+import { useProducts, useCategories } from "@/hooks/use-products";
 
 const ProductListing = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,6 +15,7 @@ const ProductListing = () => {
   const [minRating, setMinRating] = useState(0);
 
   const { data: products = [], isLoading } = useProducts(categoryFilter || undefined);
+  const { data: categories = [] } = useCategories();
 
   const filtered = useMemo(() => {
     let result = [...products];

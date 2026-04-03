@@ -1,9 +1,25 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import { login } from "@/store/authSlice";
 import { toast } from "sonner";
 import api from "@/lib/api";
+
+const getPasswordStrength = (password) => {
+  if (!password) return null;
+  const checks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+  const score = Object.values(checks).filter(Boolean).length;
+
+  if (score <= 2) return { label: "Weak", color: "bg-red-500", textColor: "text-red-600", checks };
+  if (score <= 3) return { label: "Medium", color: "bg-yellow-500", textColor: "text-yellow-600", checks };
+  return { label: "Strong", color: "bg-green-500", textColor: "text-green-600", checks };
+};
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -16,6 +32,8 @@ const SignUp = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+
   const validate = () => {
     const e = {};
     if (!name.trim()) e.name = "Enter your name";
@@ -23,6 +41,8 @@ const SignUp = () => {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "Enter a valid email";
     if (!password) e.password = "Enter a password";
     else if (password.length < 8) e.password = "Minimum 8 characters required";
+    else if (!/[A-Z]/.test(password)) e.password = "Must include an uppercase letter";
+    else if (!/[0-9]/.test(password)) e.password = "Must include a number";
     if (password !== confirmPassword) e.confirmPassword = "Passwords must match";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -49,13 +69,6 @@ const SignUp = () => {
     }
   };
 
-  const fields = [
-    { label: "Your name", value: name, set: setName, key: "name", type: "text" },
-    { label: "Email", value: email, set: setEmail, key: "email", type: "email" },
-    { label: "Password", value: password, set: setPassword, key: "password", type: "password", hint: "At least 8 characters" },
-    { label: "Re-enter password", value: confirmPassword, set: setConfirmPassword, key: "confirmPassword", type: "password" },
-  ];
-
   return (
     <div className="min-h-screen bg-card flex flex-col items-center">
       <Link to="/" className="mt-6 mb-4">
@@ -71,19 +84,67 @@ const SignUp = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-3">
-          {fields.map((f) => (
-            <div key={f.key}>
-              <label className="text-sm font-bold text-card-foreground">{f.label}</label>
-              <input
-                type={f.type}
-                value={f.value}
-                onChange={(e) => f.set(e.target.value)}
-                className="w-full mt-1 px-3 py-1.5 border border-border rounded text-sm text-foreground bg-card focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-              {f.hint && !errors[f.key] && <p className="text-xs text-muted-foreground mt-0.5">{f.hint}</p>}
-              {errors[f.key] && <p className="text-amazon-deal text-xs mt-0.5">{errors[f.key]}</p>}
-            </div>
-          ))}
+          <div>
+            <label className="text-sm font-bold text-card-foreground">Your name</label>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+              className="w-full mt-1 px-3 py-1.5 border border-border rounded text-sm text-foreground bg-card focus:outline-none focus:ring-2 focus:ring-ring" />
+            {errors.name && <p className="text-amazon-deal text-xs mt-0.5">{errors.name}</p>}
+          </div>
+
+          <div>
+            <label className="text-sm font-bold text-card-foreground">Email</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+              className="w-full mt-1 px-3 py-1.5 border border-border rounded text-sm text-foreground bg-card focus:outline-none focus:ring-2 focus:ring-ring" />
+            {errors.email && <p className="text-amazon-deal text-xs mt-0.5">{errors.email}</p>}
+          </div>
+
+          <div>
+            <label className="text-sm font-bold text-card-foreground">Password</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+              className="w-full mt-1 px-3 py-1.5 border border-border rounded text-sm text-foreground bg-card focus:outline-none focus:ring-2 focus:ring-ring" />
+            {errors.password && <p className="text-amazon-deal text-xs mt-0.5">{errors.password}</p>}
+
+            {strength && (
+              <div className="mt-2">
+                <div className="flex gap-1 mb-1">
+                  <div className={`h-1.5 flex-1 rounded-full ${strength.label !== null ? strength.color : "bg-border"}`} />
+                  <div className={`h-1.5 flex-1 rounded-full ${strength.label === "Medium" || strength.label === "Strong" ? strength.color : "bg-border"}`} />
+                  <div className={`h-1.5 flex-1 rounded-full ${strength.label === "Strong" ? strength.color : "bg-border"}`} />
+                </div>
+                <p className={`text-xs font-medium ${strength.textColor}`}>
+                  Password strength: {strength.label}
+                </p>
+                <ul className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                  <li className={strength.checks.length ? "text-amazon-green" : ""}>
+                    {strength.checks.length ? "✓" : "○"} At least 8 characters
+                  </li>
+                  <li className={strength.checks.uppercase ? "text-amazon-green" : ""}>
+                    {strength.checks.uppercase ? "✓" : "○"} Uppercase letter
+                  </li>
+                  <li className={strength.checks.lowercase ? "text-amazon-green" : ""}>
+                    {strength.checks.lowercase ? "✓" : "○"} Lowercase letter
+                  </li>
+                  <li className={strength.checks.number ? "text-amazon-green" : ""}>
+                    {strength.checks.number ? "✓" : "○"} Number
+                  </li>
+                  <li className={strength.checks.special ? "text-amazon-green" : ""}>
+                    {strength.checks.special ? "✓" : "○"} Special character
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label className="text-sm font-bold text-card-foreground">Re-enter password</label>
+            <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full mt-1 px-3 py-1.5 border border-border rounded text-sm text-foreground bg-card focus:outline-none focus:ring-2 focus:ring-ring" />
+            {errors.confirmPassword && <p className="text-amazon-deal text-xs mt-0.5">{errors.confirmPassword}</p>}
+            {confirmPassword && password !== confirmPassword && !errors.confirmPassword && (
+              <p className="text-amazon-deal text-xs mt-0.5">Passwords must match</p>
+            )}
+          </div>
+
           <button type="submit" disabled={loading} className="amazon-btn w-full py-2">
             {loading ? "Creating account..." : "Create your Amazon account"}
           </button>

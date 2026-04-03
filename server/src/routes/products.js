@@ -14,6 +14,20 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/products/categories - Get all unique categories with a sample image
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await Product.aggregate([
+      { $group: { _id: '$category', image: { $first: '$image' }, count: { $sum: 1 } } },
+      { $project: { id: '$_id', name: '$_id', image: 1, count: 1, _id: 0 } },
+      { $sort: { name: 1 } }
+    ]);
+    res.json(categories);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // GET /api/products/search?q= - Search products
 router.get('/search', async (req, res) => {
   try {

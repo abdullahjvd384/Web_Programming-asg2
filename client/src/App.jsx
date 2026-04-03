@@ -13,6 +13,7 @@ import Cart from "./pages/Cart";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ const App = () => (
               <Route path="/products" element={<ProductListing />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/search" element={<SearchResults />} />
-              <Route path="/cart" element={<Cart />} />
+              <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="*" element={<NotFound />} />
